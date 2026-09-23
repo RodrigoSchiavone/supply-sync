@@ -2,9 +2,10 @@ import os
 import sys
 import logging
 import traceback
-from config import PASTA_FINAL_ESTOQUE, PASTA_FINAL_VENDAS
+from config import PASTA_FINAL_ESTOQUE, PASTA_FINAL_VENDAS, ARQUIVO_SUPRIMENTOS
 from estoque_service import processar_estoque
 from vendas_service import processar_vendas
+from suprimentos_service import processar_suprimentos
 
 DEBUG_MODE = os.getenv("DEBUG", "False").lower() in ("true", "1", "t")
 
@@ -20,6 +21,9 @@ def run():
     
     # 2. Processamento da rotina de Vendas
     processar_vendas()
+
+    # 3. Processamento da rotina de Suprimentos (Atualização do Compras.xlsx)
+    processar_suprimentos()
 
 if __name__ == "__main__":
     try:

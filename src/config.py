@@ -28,3 +28,6 @@ ARQUIVO_ESTOQUE_ORIGINAL = limpar_caminho(os.getenv("ARQUIVO_ESTOQUE_ORIGINAL"))
 # --- CONFIGURAÇÕES DE VENDAS ---
 PASTA_FINAL_VENDAS = limpar_caminho(os.getenv("PASTA_FINAL_VENDAS")) or os.path.join(DIR_BASE, "Vendas")
 ARQUIVO_VENDAS_ORIGINAL = limpar_caminho(os.getenv("ARQUIVO_VENDAS_ORIGINAL")) or os.path.join(DIR_BASE, "vendas.xlsx")
+
+# --- CONFIGURAÇÕES DE SUPRIMENTOS ---
+ARQUIVO_SUPRIMENTOS = limpar_caminho(os.getenv("ARQUIVO_SUPRIMENTOS")) or os.path.join(DIR_BASE, "Compras.xlsx")

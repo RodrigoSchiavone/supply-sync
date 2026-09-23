@@ -4,3 +4,4 @@ tqdm
 pyinstaller
 pandas
 openpyxl
+et_xmlfile

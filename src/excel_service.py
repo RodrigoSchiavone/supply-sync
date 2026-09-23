@@ -11,7 +11,11 @@ class ExcelManager:
         return self
 
     def processar_dia(self, modelo_path: str, caminho_destino: str, string_mdx: str):
-        wb = self.excel.Workbooks.Open(Filename=modelo_path, UpdateLinks=0, ReadOnly=False)
+        # Normaliza os caminhos para o formato nativo do Windows (\) exigido pela API COM do Excel
+        modelo_path_win = os.path.normpath(modelo_path)
+        caminho_destino_win = os.path.normpath(caminho_destino)
+
+        wb = self.excel.Workbooks.Open(Filename=modelo_path_win, UpdateLinks=0, ReadOnly=False)
         try:
             ws = wb.Worksheets("Planilha1")
             pt = ws.PivotTables("Estoque")
@@ -21,7 +25,7 @@ class ExcelManager:
             pf.VisibleItemsList = [string_mdx]
             pt.ManualUpdate = False
 
-            wb.SaveAs(Filename=caminho_destino, FileFormat=51) # 51 = xlOpenXMLWorkbook (.xlsx)
+            wb.SaveAs(Filename=caminho_destino_win, FileFormat=51) # 51 = xlOpenXMLWorkbook (.xlsx)
         finally:
             wb.Close(SaveChanges=False)
 

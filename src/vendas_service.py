@@ -7,16 +7,16 @@ from date_utils import obter_datas_faltantes
 from excel_service import ExcelManager
 
 def processar_vendas():
-    print("\n--- INICIANDO PROCESSAMENTO DE VENDAS ---")
+    logging.info("\n--- INICIANDO PROCESSAMENTO DE VENDAS ---")
     data_base_inicial = datetime(2025, 1, 1).date()
     datas_faltantes, _, dt_alvo = obter_datas_faltantes(PASTA_FINAL_VENDAS, data_inicio_padrao=data_base_inicial)
 
     if not datas_faltantes:
-        print(f"Vendas: Todos os arquivos até D-1 ({dt_alvo.strftime('%d/%m/%Y')}) já foram criados!")
+        logging.info(f"Vendas: Todos os arquivos até D-1 ({dt_alvo.strftime('%d/%m/%Y')}) já foram criados!")
         return
 
-    print(f"Pasta de destino: {PASTA_FINAL_VENDAS}")
-    print(f"Gerando {len(datas_faltantes)} arquivo(s) pendente(s) de Vendas...\n")
+    logging.info(f"Pasta de destino: {PASTA_FINAL_VENDAS}")
+    logging.info(f"Gerando {len(datas_faltantes)} arquivo(s) pendente(s) de Vendas...\n")
 
     modelo_path_win = os.path.normpath(ARQUIVO_VENDAS_ORIGINAL)
     if not os.path.exists(modelo_path_win):
@@ -64,5 +64,4 @@ def processar_vendas():
         finally:
             wb_vendas.Close(SaveChanges=False)
 
-    print("Vendas concluído com sucesso!")
-    
+    logging.info("Vendas concluído com sucesso!")

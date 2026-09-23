@@ -7,15 +7,15 @@ from date_utils import obter_datas_faltantes
 from excel_service import ExcelManager
 
 def processar_estoque():
-    print("\n--- INICIANDO PROCESSAMENTO DE ESTOQUE ---")
+    logging.info("\n--- INICIANDO PROCESSAMENTO DE ESTOQUE ---")
     datas_faltantes, arquivo_modelo, dt_alvo = obter_datas_faltantes(PASTA_FINAL_ESTOQUE)
 
     if not datas_faltantes:
-        print(f"Estoque: Todos os arquivos até D-1 ({dt_alvo.strftime('%d/%m/%Y')}) já foram criados!")
+        logging.info(f"Estoque: Todos os arquivos até D-1 ({dt_alvo.strftime('%d/%m/%Y')}) já foram criados!")
         return
 
-    print(f"Pasta de destino: {PASTA_FINAL_ESTOQUE}")
-    print(f"Gerando {len(datas_faltantes)} arquivo(s) pendente(s) de Estoque...\n")
+    logging.info(f"Pasta de destino: {PASTA_FINAL_ESTOQUE}")
+    logging.info(f"Gerando {len(datas_faltantes)} arquivo(s) pendente(s) de Estoque...\n")
 
     modelo_atual = arquivo_modelo if arquivo_modelo and os.path.exists(arquivo_modelo) else ARQUIVO_ESTOQUE_ORIGINAL
 
@@ -45,4 +45,4 @@ def processar_estoque():
             finally:
                 wb.Close(SaveChanges=False)
 
-    print("Estoque concluído com sucesso!")
+    logging.info("Estoque concluído com sucesso!")

@@ -21,13 +21,16 @@ def limpar_caminho(val: str) -> str:
         val = val[1:]
     return val.strip('"' + "'")
 
-# --- CONFIGURAÇÕES DE ESTOQUE ---
+# --- CAMINHOS DE TRABALHO ---
 PASTA_FINAL_ESTOQUE = limpar_caminho(os.getenv("PASTA_FINAL_ESTOQUE")) or os.path.join(DIR_BASE, "resultado")
 ARQUIVO_ESTOQUE_ORIGINAL = limpar_caminho(os.getenv("ARQUIVO_ESTOQUE_ORIGINAL")) or os.path.join(DIR_BASE, "estoque.xlsx")
 
-# --- CONFIGURAÇÕES DE VENDAS ---
 PASTA_FINAL_VENDAS = limpar_caminho(os.getenv("PASTA_FINAL_VENDAS")) or os.path.join(DIR_BASE, "Vendas")
 ARQUIVO_VENDAS_ORIGINAL = limpar_caminho(os.getenv("ARQUIVO_VENDAS_ORIGINAL")) or os.path.join(DIR_BASE, "vendas.xlsx")
 
-# --- CONFIGURAÇÕES DE SUPRIMENTOS ---
 ARQUIVO_SUPRIMENTOS = limpar_caminho(os.getenv("ARQUIVO_SUPRIMENTOS")) or os.path.join(DIR_BASE, "Compras.xlsx")
+ARQUIVO_LOJAS_BASE = limpar_caminho(os.getenv("ARQUIVO_LOJAS_BASE")) or os.path.join(DIR_BASE, "Lojas.xlsx")
+
+# --- ARQUIVOS LOCAIS DE LOG E AUXILIAR ---
+CAMINHO_LOG = os.path.join(DIR_BASE, "execucao.log")
+CAMINHO_JSON_REPROCESSAR = os.path.join(DIR_BASE, "reprocessar_arquivos.json")

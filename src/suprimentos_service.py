@@ -19,7 +19,7 @@ def processar_suprimentos():
             pt_encontrada = False
             for sheet in wb.Worksheets:
                 try:
-                    pt = sheet.PivotTables("Tabela dinâmica3")
+                    pt = sheet.PivotTables("suprimentos")
                     
                     # Garante atualização síncrona
                     try:
@@ -36,7 +36,7 @@ def processar_suprimentos():
 
             if not pt_encontrada:
                 # Fallback: Se não achar pelo nome exato em abas específicas, tenta dar RefreshAll na pasta de trabalho
-                logging.warning("Tabela dinâmica3 não encontrada pelo nome específico. Executando RefreshAll...")
+                logging.warning("Tabela suprimentos não encontrada pelo nome específico. Executando RefreshAll...")
                 wb.RefreshAll()
                 excel_mgr.aguardar_consultas_assincronas()
 
@@ -45,4 +45,3 @@ def processar_suprimentos():
             wb.Close(SaveChanges=False)
 
     print("Suprimentos atualizado com sucesso!")
-    

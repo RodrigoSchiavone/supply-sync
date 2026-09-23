@@ -2,3 +2,5 @@ pywin32
 python-dotenv
 tqdm
 pyinstaller
+pandas
+openpyxl

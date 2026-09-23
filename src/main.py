@@ -1,4 +1,6 @@
 import os
+import sys
+import traceback
 from tqdm import tqdm
 from config import PASTA_FINAL, ARQUIVO_ESTOQUE_ORIGINAL
 from date_utils import obter_datas_faltantes
@@ -36,5 +38,16 @@ def run():
 if __name__ == "__main__":
     try:
         run()
+        print("\nPressione ENTER para fechar a janela...")
+        input()
     except Exception as e:
-        print(f"\nErro durante a execução: {e}")
+        print("\n" + "=" * 60)
+        print(" OCORREU UM ERRO DURANTE A EXECUÇÃO:")
+        print("=" * 60 + "\n")
+        
+        # Imprime o rastro completo do erro (função, linha, arquivo)
+        traceback.print_exc()
+        
+        print("\n" + "=" * 60)
+        input("Pressione ENTER para sair...")
+        sys.exit(1)

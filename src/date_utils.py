@@ -4,20 +4,24 @@ from datetime import datetime, timedelta
 from typing import List, Tuple, Optional
 
 def converter_nome_para_data(nome_arquivo: str) -> Optional[datetime.date]:
-    """Extrai a data do nome do arquivo no formato dd-mm-yy.xlsx."""
-    match = re.search(r"^(\d{2})-(\d{2})-(\d{2})\.xlsx$", nome_arquivo, re.IGNORECASE)
+    """Converte nome de arquivo no formato dd-mm-yy.xlsx ou dd-mm-yyyy.xlsx para objeto date."""
+    match = re.search(r"^(\d{2})-(\d{2})-(\d{2,4})\.xlsx$", nome_arquivo, re.IGNORECASE)
     if match:
-        dia, mes, ano = map(int, match.groups())
+        dia, mes, ano_raw = map(int, match.groups())
+        ano = 2000 + ano_raw if ano_raw < 100 else ano_raw
         try:
-            return datetime(2000 + ano, mes, dia).date()
+            return datetime(ano, mes, dia).date()
         except ValueError:
             return None
     return None
 
-def obter_datas_faltantes(pasta_final: str) -> Tuple[List[datetime.date], Optional[str], datetime.date]:
-    """Mapeia os arquivos na pasta de destino e retorna a lista de datas pendentes até D-1."""
+def obter_datas_faltantes(
+    pasta_final: str, 
+    data_inicio_padrao: Optional[datetime.date] = None
+) -> Tuple[List[datetime.date], Optional[str], datetime.date]:
+    """Mapeia os arquivos existentes para calcular o intervalo de datas pendentes até D-1."""
     if not os.path.exists(pasta_final):
-        os.makedirs(pasta_final)
+        os.makedirs(pasta_final, exist_ok=True)
 
     dt_max_existente = None
     arquivo_modelo = None
@@ -33,7 +37,7 @@ def obter_datas_faltantes(pasta_final: str) -> Tuple[List[datetime.date], Option
     dt_alvo = datetime.now().date() - timedelta(days=1)
     
     if dt_max_existente is None:
-        dt_inicio = datetime.now().date() - timedelta(days=60)
+        dt_inicio = data_inicio_padrao if data_inicio_padrao else (datetime.now().date() - timedelta(days=60))
     else:
         dt_inicio = dt_max_existente + timedelta(days=1)
 

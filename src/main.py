@@ -1,51 +1,36 @@
 import os
 import sys
+import logging
 import traceback
-from tqdm import tqdm
-from config import PASTA_FINAL, ARQUIVO_ESTOQUE_ORIGINAL
-from date_utils import obter_datas_faltantes
-from excel_service import ExcelManager
+from config import PASTA_FINAL_ESTOQUE, PASTA_FINAL_VENDAS
+from estoque_service import processar_estoque
+from vendas_service import processar_vendas
+
+DEBUG_MODE = os.getenv("DEBUG", "False").lower() in ("true", "1", "t")
+
+logging.basicConfig(
+    level=logging.DEBUG if DEBUG_MODE else logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%H:%M:%S"
+)
 
 def run():
-    datas_faltantes, arquivo_modelo, dt_alvo = obter_datas_faltantes(PASTA_FINAL)
-
-    if not datas_faltantes:
-        print(f"Todos os arquivos até D-1 ({dt_alvo.strftime('%d/%m/%Y')}) já foram criados!")
-        return
-
-    print(f"Pasta de destino: {PASTA_FINAL}")
-    print(f"Gerando {len(datas_faltantes)} arquivo(s) pendente(s)...\n")
-
-    modelo_atual = arquivo_modelo if arquivo_modelo and os.path.exists(arquivo_modelo) else ARQUIVO_ESTOQUE_ORIGINAL
-
-    if not os.path.exists(modelo_atual):
-        raise FileNotFoundError(f"Arquivo modelo inicial não encontrado em: {modelo_atual}")
-
-    with ExcelManager() as excel_mgr:
-        for dt_loop in tqdm(datas_faltantes, desc="Processando datas", unit="arq"):
-            string_mdx = f"[Data Estoque].[Dia].&[{dt_loop.strftime('%Y-%m-%d')}T00:00:00]"
-            caminho_novo = os.path.join(PASTA_FINAL, f"{dt_loop.strftime('%d-%m-%y')}.xlsx")
-
-            excel_mgr.processar_dia(
-                modelo_path=modelo_atual,
-                caminho_destino=caminho_novo,
-                string_mdx=string_mdx
-            )
-            modelo_atual = caminho_novo
-
-    print("\nProcesso concluído com sucesso!")
+    # 1. Processamento da rotina de Estoque
+    processar_estoque()
+    
+    # 2. Processamento da rotina de Vendas
+    processar_vendas()
 
 if __name__ == "__main__":
     try:
         run()
-        print("\nPressione ENTER para fechar a janela...")
+        print("\nProcessamento total concluído! Pressione ENTER para fechar a janela...")
         input()
     except Exception as e:
         print("\n" + "=" * 60)
         print(" OCORREU UM ERRO DURANTE A EXECUÇÃO:")
         print("=" * 60 + "\n")
         
-        # Imprime o rastro completo do erro (função, linha, arquivo)
         traceback.print_exc()
         
         print("\n" + "=" * 60)

@@ -65,3 +65,5 @@ def processar_vendas():
             wb_vendas.Close(SaveChanges=False)
 
     logging.info("Vendas concluído com sucesso!")
+    
+    return [os.path.join(PASTA_FINAL_VENDAS, f"{dt.strftime('%d-%m-%Y')}.xlsx") for dt in datas_faltantes]

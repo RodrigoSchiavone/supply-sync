@@ -46,3 +46,4 @@ def processar_estoque():
                 wb.Close(SaveChanges=False)
 
     logging.info("Estoque concluído com sucesso!")
+    return [os.path.join(PASTA_FINAL_ESTOQUE, f"{dt.strftime('%d-%m-%y')}.xlsx") for dt in datas_faltantes]return [os.path.join(PASTA_FINAL_ESTOQUE, f"{dt.strftime('%d-%m-%y')}.xlsx") for dt in datas_faltantes]

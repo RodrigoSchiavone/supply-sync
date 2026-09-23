@@ -30,20 +30,27 @@ def run():
     logging.info("INICIANDO ROTINA INTEGRADA DE ABASTECIMENTO")
     logging.info("==================================================")
 
-    # 0. Limpa arquivos pré-marcados com falhas de loja na execução anterior
+    # 0. Limpa falhas da execução anterior, se houver
     gerenciar_arquivos_pendentes_de_reprocessamento()
 
-    # 1. Processamento da rotina de Estoque
-    processar_estoque()
-    
-    # 2. Processamento da rotina de Vendas
-    processar_vendas()
+    # Guarda o histórico dos arquivos que foram efetivamente gerados HOJE
+    novos_arquivos = []
 
-    # 3. Processamento da rotina de Suprimentos
+    # 1. Estoque
+    criados_estoque = processar_estoque() or []
+    for arq in criados_estoque:
+        novos_arquivos.append({"caminho": arq, "tipo": "estoque"})
+    
+    # 2. Vendas
+    criados_vendas = processar_vendas() or []
+    for arq in criados_vendas:
+        novos_arquivos.append({"caminho": arq, "tipo": "vendas"})
+
+    # 3. Suprimentos
     processar_suprimentos()
 
-    # 4. Auditoria Final de Presença de Lojas
-    auditar_arquivos_gerados()
+    # 4. Auditoria (Valida SOMENTE os arquivos novos criados)
+    auditar_arquivos_gerados(novos_arquivos)
 
     logging.info("==================================================")
     logging.info("TODAS AS ROTINAS FORAM CONCLUÍDAS COM SUCESSO")
